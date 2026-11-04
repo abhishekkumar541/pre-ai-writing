@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pre-AI Writing"
+  short_description: "Write documents others read the way people did before AI"
+  default_prompt: "Use $pre-ai-writing to draft or check this document before it goes to its reader."
