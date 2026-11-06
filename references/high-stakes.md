@@ -57,8 +57,9 @@ A reviewer reading Markdown can't judge page counts, so check pages in the PDF y
 python3 scripts/sameness_check.py --draft draft.md --baselines baselines --ideas ideas.json [--terms terms.txt] --out sameness_report.md
 ```
 
-It passes when all three hold:
-- the draft's topic overlap and reused wording sit below every baseline's leave-one-out score
+It passes when all four hold:
+- the draft's topic overlap sits below every baseline's leave-one-out score
+- the draft's reused wording sits below every baseline's leave-one-out score
 - the lint tell rate is under 3 per 1,000 words
 - the draft's subject-specific evidence (terms from `terms.txt`, or else numbers and proper names) is at least double the baseline median
 
