@@ -8,12 +8,14 @@ This skill makes Claude write the way people wrote before ChatGPT arrived in Nov
 
 ## What's in it
 
-- `SKILL.md` is the ten-step workflow Claude follows, from framing the reader to handover.
+- `SKILL.md` is the eleven-step workflow Claude follows, from framing the reader to logging your corrections after handover.
 - `scripts/lint_doc.py` is the linter. It uses only the standard library and reports FAIL and WARN with line numbers.
 - `references/` has the rules with before and after examples, a template per document type, where evidence goes, a voice template and the high-stakes tier.
 - `scripts/sameness_check.py` compares a draft with ChatGPT, Gemini and Claude answers to the same brief, and `scripts/blind_pack.py` shuffles and anonymises them for a blind odd-one-out review.
 - `scripts/build_pdf.py` turns Markdown into a PDF through headless Chrome. It needs the `markdown` package.
 - `scripts/prompt_trigger.py` is an optional hook that reminds Claude to use the skill.
+- `learnings.md` logs your corrections until they earn a rule.
+- `scripts/health_check.py` checks the tests, the rule tags and how long corrections have waited.
 
 ## Install
 
@@ -38,6 +40,12 @@ Claude tends to skip skills on short tasks. In fresh-session tests on Opus, it u
 ```
 
 The hook is a local keyword match with no network calls. It only adds a reminder when a message asks to draft or review an email, post, letter, memo, deck, resume or landing page.
+
+## Keeping it current
+
+Claude logs each correction you make in `learnings.md` and leaves the rules alone for now, so one brief's fix doesn't become a rule for every document. A correction becomes a rule when it comes up again in another document or when you approve it. Each new rule gets a linter check with one test that fires and one that stays quiet, or a `[manual]` tag that says why the linter can't check it.
+
+Run `python3 -I scripts/health_check.py` after you change a rule and once a month. It runs the tests, checks every rule's tag and flags corrections that have sat in the log for more than 30 days.
 
 ## Using the linter on its own
 

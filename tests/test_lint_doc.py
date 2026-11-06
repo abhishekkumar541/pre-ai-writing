@@ -75,7 +75,7 @@ class CleanDoc(unittest.TestCase):
     def test_near_misses(self):
         r = run(CLEAN, "memo")
         for rule in ("placeholders", "jargon", "stock_words", "urls_in_body", "colon_headings", "not_x_but_y",
-                     "counter_sections", "no_next_step", "no_assumptions", "late_assumptions"):
+                     "counter_sections", "no_next_step", "no_assumptions", "late_assumptions", "investor_verbs"):
             self.assertNotIn(rule, r, rule)
 
 
@@ -101,6 +101,13 @@ class Fires(unittest.TestCase):
 
     def test_jargon_is_warn(self):
         self.check("# T\n\nWe will leverage partners and showcase results.\n", "jargon", "WARN")
+
+    def test_investor_verbs_is_warn(self):
+        self.check("# T\n\nThe three channels I'd fund, and the one to double down on.\n", "investor_verbs", "WARN")
+
+    def test_investor_verbs_near_miss(self):
+        r = run("# T\n\nThe three channels I'd invest in. We found the fundamentals weak.\n")
+        self.assertNotIn("investor_verbs", r)
 
     def test_staged_and_residue(self):
         self.check("# T\n\nHere's the thing: churn is high. I hope this helps!\n", "staged_or_residue", "FAIL")

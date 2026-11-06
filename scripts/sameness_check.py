@@ -106,7 +106,7 @@ def sentences(t):
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+|\n{2,}", t) if len(s.split()) >= 3]
 
 
-def tells(raw: str):
+def tells(raw: str, dtype: str = "doc"):
     low = raw.lower()
     words = max(len(tokens(raw)), 1)
     out = {}
@@ -122,7 +122,7 @@ def tells(raw: str):
     lens = [len(s.split()) for s in sentences(raw)]
     out["sentence_len_mean"] = round(statistics.mean(lens), 1) if lens else 0
     out["burstiness_cv"] = round(statistics.pstdev(lens) / statistics.mean(lens), 2) if len(lens) > 1 else 0
-    out["tells_per_1k_words"] = lint_doc.tells_per_1k(raw)[0]
+    out["tells_per_1k_words"] = lint_doc.tells_per_1k(raw, dtype)[0]
     return out
 
 
@@ -161,6 +161,7 @@ def main():
     ap.add_argument("--ideas", default=None, help="consensus_ideas.json")
     ap.add_argument("--terms", default=None, help="terms only first-hand work would contain, one per line")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--type", default="doc", choices=lint_doc.TYPES, help="document type of the draft, e.g. deck (baselines are scored as doc)")
     a = ap.parse_args()
 
     draft_raw = Path(a.draft).read_text(encoding="utf-8")
@@ -278,7 +279,7 @@ def main():
     keys = list(TELL_PATTERNS) + ["stock_words", "participle_clauses_per_1k", "sentence_len_mean", "burstiness_cv",
                                   "tells_per_1k_words"]
     bt = [tells(r) for r in base_raw]
-    dt = tells(draft_raw)
+    dt = tells(draft_raw, a.type)
     w("| Tell | Baseline median | Draft | Target |\n|---|---|---|---|")
     targets = {"burstiness_cv": "higher is more human (vary sentence length)", "sentence_len_mean": "12-20",
                "tells_per_1k_words": "under 3", "participle_clauses_per_1k": "below baseline median"}
