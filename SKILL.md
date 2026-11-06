@@ -54,7 +54,8 @@ Write the way people wrote before November 2022: the objective first, assumption
    - Does every number trace to the notes?
    - Does it end with a next step or an ask?
    - Does the format fit where it is going? (Plain text for email and LinkedIn, no markdown.)
-9. **High-stakes tier only.** This step is required whenever step 1 says high-stakes, short texts included. Follow `references/high-stakes.md`:
+   - Does it repeat a mistake listed under Open in `learnings.md`?
+9. **High-stakes tier only.** This step is required whenever step 1 says high-stakes, short texts included. A referral or job-application email gets the reader-lens review too. Follow `references/high-stakes.md`:
    - a reader-lens review by a fresh agent
    - for take-homes and pitches, baselines plus `scripts/sameness_check.py` and a blind review via `scripts/blind_pack.py`
 
@@ -71,6 +72,7 @@ Write the way people wrote before November 2022: the objective first, assumption
     ```
 
     Then check the page images, including the sources page. Run it without `-I` because it imports `markdown`.
+11. **Log corrections.** If the user corrects the text, at handover or later, add one entry per correction under Open in `learnings.md`. Don't edit `references/rules.md` from a single correction unless the user asks for a rule. *Done when every correction in this session has an entry.*
 
 ## Rules that override other skills
 
@@ -79,12 +81,23 @@ Write the way people wrote before November 2022: the objective first, assumption
 - **Process stays off the page.** Method, process and AI use get one line on the sources slide or in notes, never a section or slide.
 - **This skill is the final pass.** Copywriting, email and resume skills draft content; this skill runs after them, not instead of them.
 
+## Keeping the skill current
+
+The skill learns from the user's corrections, but a person approves every new rule:
+- **Log first.** Corrections go to `learnings.md` (step 11), never straight into the rules.
+- **Promote on repeat or approval.** A correction becomes a rule when it comes up again in a different document, or when the user asks. Promotion steps are in `learnings.md`.
+- **Every rule is checked.** Each rule heading names its `scripts/lint_doc.py` check with a firing test and a near-miss test, or says `[manual]` with the reason.
+- **Commit each change.** Keep the skill folder in git, one commit per rule change, so a bad rule can be reverted.
+- **Health check.** Run `python3 -I scripts/health_check.py` after any change and once a month. It runs the tests, checks rule tags and flags Open learnings older than 30 days.
+
 ## Files
 
 - `scripts/lint_doc.py`: the structural and wording linter. Run `--help` for flags; `--fix-typography OUT` writes a fixed copy.
 - `scripts/sameness_check.py`, `scripts/blind_pack.py`: the high-stakes kit.
 - `scripts/build_pdf.py`: Markdown to PDF, with checks.
 - `scripts/prompt_trigger.py`: an optional UserPromptSubmit hook that reminds Claude to use this skill (see README).
+- `scripts/health_check.py`: tests, rule tags, learnings age and, if you keep a private and a public copy, what changed since the last sync.
+- `learnings.md`: corrections waiting to become rules, and what was promoted or dropped.
 - `references/`:
   - `structures.md`
   - `rules.md`

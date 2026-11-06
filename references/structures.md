@@ -87,6 +87,7 @@ Amazon's narrative memos put the author's view in prose with causal links ("beca
 - **Headline** in the searcher's or buyer's own words, with one action.
 - **Reading level:** Unbounce found pages at a 5th to 7th grade level converted at 11.1%, 56% higher than professional-level pages: https://unbounce.com/conversion-benchmark-report/ . The linter WARNs above grade 9.
 - **Words per section:** measure against a page the client already ships, not a generic rule.
+- **Brand patterns:** keep the client's own patterns unless the user vetoes one after seeing the evidence.
 
 ## Resume
 

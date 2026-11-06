@@ -77,6 +77,9 @@ streamlines streamlined streamlining showcase showcases showcased showcasing syn
 empower empowers empowered empowering elevate elevates elevated elevating orchestrate orchestrated
 game-changer game-changing cutting-edge best-in-class world-class""".split()
 JARGON_PHRASES = ["move the needle", "low-hanging fruit", "north star"]
+# Rule 15: investor or boardroom decision verbs. WARN only, because the brief may use them.
+INVESTOR_WORDS = ["fund", "funds", "funded", "deploy capital", "double down", "doubling down", "bet on",
+                  "betting on", "allocate firepower", "firepower"]
 WEAK_WORDS = """additionally crucial enhance enhances enhanced enhancing comprehensive landscape navigate
 navigates navigating align aligns aligned valuable nuanced innovative unlock unlocks unlocked
 furthermore moreover""".split()
@@ -365,6 +368,12 @@ def lint(doc, dtype, rep):
                 "Stock AI words (Humanizer 12). Say the plain thing.", strong)
     if jargon:
         rep.add("jargon", "WARN", len(jargon), "Business jargon ('leverage', 'showcase'). Use the plain verb: use, show, lead.", jargon)
+    iv = re.compile(r"\b(" + "|".join(map(re.escape, INVESTOR_WORDS)) + r")\b", re.I)
+    inv = [f"L{ln}: {m.group(0)} | {mention_free(l)[max(0, m.start() - 30):m.end() + 30]}"
+           for ln, l in body for m in iv.finditer(mention_free(l))]
+    if inv:
+        rep.add("investor_verbs", "WARN", len(inv),
+                "Investor word for the decision (rule 15). Use the brief's own verb; keep it only if the brief uses it.", inv)
     if weak and len(weak) * per_k >= 3:
         rep.add("stock_words_weak", "WARN", len(weak), f"Common AI-favoured words at {len(weak) * per_k:.1f} per 1,000 words.", weak)
 
@@ -616,11 +625,11 @@ def lint(doc, dtype, rep):
     return stats
 
 
-def tells_per_1k(text):
-    """Count of WARN and FAIL hits per 1,000 words, for sameness_check.py."""
+def tells_per_1k(text, dtype="doc"):
+    """Count of WARN and FAIL hits per 1,000 words, for sameness_check.py. Score a deck with dtype="deck"."""
     doc = Doc(text, "")
     rep = Report()
-    lint(doc, "doc", rep)
+    lint(doc, dtype, rep)
     skip = {"length", "no_next_step", "no_assumptions", "late_assumptions", "prose_share", "bullet_share",
             "table_share", "source_not_cited", "curly_quotes"}
     n = sum(i["count"] for i in rep.items if i["level"] in ("FAIL", "WARN") and i["rule"] not in skip)

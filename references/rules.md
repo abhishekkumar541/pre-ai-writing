@@ -14,6 +14,7 @@ After:
 
 These labels do the same job and fail the same way:
 - "Why."
+- "Why this number."
 - "What I'd do."
 - "Reasoning:"
 - "TL;DR"
@@ -113,18 +114,20 @@ No "In summary", no "Key takeaways" block, no closing restatement.
 
 A "Limits, and how I made this" slide in an interview deck reads as padding, because every slide should answer a prompt the reader set. Method and AI use get one line on the sources slide or in the speaker notes, for example "AI tools helped with research and drafting."
 
-## 11. Use the reader's words, not your working shorthand.
+## 11. Use the reader's words, not your working shorthand. [manual]
 
 Before: "workspaces", the internal name, in an email to buyers.
 
-After: "teams", the word buyers use. If you need a working term, explain it once in Assumptions, or not at all.
+After: "teams" everywhere: body, tables, slide labels and speaker notes. Don't define your own shorthand in Assumptions and then use it.
 
-## 12. No compliment-then-"but" opener in emails and letters.
+Manual check: the right word depends on the client's own copy, which the linter doesn't have. To find the client's word, count the nouns in the client's own copy and use the most common one. For example, if Acme's saved posts and pages say "teams" far more often than "workspaces" or "accounts", use "teams". Don't reinvent their vocabulary.
+
+## 12. No compliment-then-"but" opener in emails and letters. [manual]
 
 Before:
 > Loved your recent post on retention, but I noticed...
 
-After: give the reason you're writing and the ask in the first two lines. If a detail about the reader matters, use it as the reason, not as flattery.
+After: say why you are writing and what you are asking in the first two lines. Manual check: telling a compliment from a real reason needs judgment, so read the first two lines at step 8. If a detail about the reader matters, use it as the reason, not as flattery.
 
 ## 13. Nothing unfinished goes out. [placeholders]
 
@@ -139,4 +142,24 @@ A placeholder that is part of the deliverable, such as an email template's `[pos
 
 ## 14. No dashes, anywhere (house rule). [dash]
 
-Never use U+2014 (em dash) or U+2013 (en dash), and that includes quotes, sources and speaker notes. Use a hyphen for ranges ("2022 - 2024"); otherwise use a comma, colon or full stop. `lint_doc.py --fix-typography OUT` writes a fixed copy and never edits in place.
+- Never use U+2014 (em dash) or U+2013 (en dash), in quotes, sources and speaker notes included.
+- For a range, use a hyphen ("2022 - 2024").
+- Otherwise use a comma, colon or full stop.
+- `lint_doc.py --fix-typography OUT` writes a fixed copy and never edits in place.
+
+## 15. Use the brief's own verbs for the decision; no investor words. [investor_verbs]
+
+Pick the decision verb from the brief and keep it in titles, labels and tables. Avoid investor or boardroom words unless the brief uses them:
+- fund
+- deploy capital
+- double down
+- bet on
+- allocate firepower
+
+Before (the brief asked which channels Acme should invest in):
+> Channels I'd fund · Don't fund · Where I'd double down
+
+After:
+> Channels I'd invest in · Skip · Where I'd invest more
+
+The reader set the verb, so use theirs. `investor_verbs` is a WARN for the words above, because the brief may use one of them. It can't see every mismatch, so also check during the step 8 read-through: put the brief's key verbs next to the document's labels and make them match.
